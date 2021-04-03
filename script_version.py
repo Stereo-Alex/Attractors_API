@@ -1,5 +1,4 @@
 
-
 import datashader
 import numpy as np, pandas as pd, datashader as ds
 from datashader import transfer_functions as tf
@@ -7,6 +6,7 @@ from datashader.colors import inferno, viridis
 from numba import jit
 from math import sin, cos, sqrt, fabs
 import yaml
+import moviepy.video.io.ImageSequenceClip
 
 
 from colorcet import palette
@@ -64,12 +64,12 @@ def trajectory(fn, x0, y0, a, b=0, c=0, d=0, e=0, f=0, n=n):
 
 
 
-get_ipython().run_cell_magic('time', '', 'df = trajectory(Clifford, 0, 0, -1.3, -1.3, -1.8, -1.9)')
+#get_ipython().run_cell_magic('time', '', 'df = trajectory(Clifford, 0, 0, -1.3, -1.3, -1.8, -1.9)')
 
 
 
 
-get_ipython().run_cell_magic('time', '', '\ncvs = ds.Canvas(plot_width = 900, plot_height = 900)\nagg = cvs.points(df, \'x\', \'y\')\nprint(agg.values[190:195,190:195],"\\n")')
+#get_ipython().run_cell_magic('time', '', '\ncvs = ds.Canvas(plot_width = 900, plot_height = 900)\nagg = cvs.points(df, \'x\', \'y\')\nprint(agg.values[190:195,190:195],"\\n")')
 
 
 
@@ -190,6 +190,26 @@ img.save(fp=fp_out, format='GIF', append_images=imgs,
 
 
 
+
+list_gen = []
+
+for i in range(0, 50):
+    i = str(i)
+    if len(i) <= 1:
+        i = str(f'images/00{i}.png')
+        list_gen.append(i)
+    else:
+        i = str(f'images/0{i}.png')
+        list_gen.append(i) 
+
+import os
+image_folder='images'
+fps=10
+
+image_files = [image_folder+'/'+img for img in os.listdir(image_folder) if img.endswith(".png")]
+clip = moviepy.video.io.ImageSequenceClip.ImageSequenceClip(list_gen, fps=fps)
+
+clip.write_videofile('my_video.mp4')
 
 
 
